@@ -15,6 +15,6 @@ public class Category {
 
 
     @NotEmpty(message = "The Name must not be empty")
-    @Size(min = 3, max = 10, message = "The 'Name' be more than 3 length long")
+    @Size(min = 3, max = 15, message = "The 'Name' be more than 3 length ")
     private String name;
 }
