@@ -39,7 +39,7 @@ public class ProductController {
             return ResponseEntity.status(404).body(new ApiResponse("Invalid Category ID!"));
         }
 
-        return ResponseEntity.status(500).body(new ApiResponse("error!"));
+        return ResponseEntity.status(500).body(new ApiResponse("Error!"));
     }
 
     // Updating IN Controller
@@ -49,11 +49,17 @@ public class ProductController {
             String messageError = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(400).body(new ApiResponse(messageError));
         }
-        boolean isUpdated = productService.updateProduct(id, product);
-        if (isUpdated) {
-            return ResponseEntity.status(200).body(new ApiResponse("Product updated successfully!"));
+        int result = productService.updateProduct(id, product);
+
+        if (result == 200) {
+            return ResponseEntity.ok(new ApiResponse("Merchant stock updated successfully!"));
+        } else if (result == 1) {
+            return ResponseEntity.status(404).body(new ApiResponse("NOT found!"));
+        } else if (result == 2) {
+            return ResponseEntity.status(404).body(new ApiResponse("Invalid category ID!"));
         }
-        return ResponseEntity.status(404).body(new ApiResponse("Product not found"));
+
+        return ResponseEntity.status(500).body(new ApiResponse("Error!"));
     }
 
     // Deleting IN Controller
@@ -63,6 +69,6 @@ public class ProductController {
         if (isDeleted) {
             return ResponseEntity.status(200).body(new ApiResponse("Product deleted successfully!"));
         }
-        return ResponseEntity.status(404).body(new ApiResponse("Product not found"));
+        return ResponseEntity.status(404).body(new ApiResponse("NOT found"));
     }
 }

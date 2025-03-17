@@ -51,7 +51,7 @@ public class MerchantStockController {
             return ResponseEntity.badRequest().body(new ApiResponse(errors.getFieldError().getDefaultMessage()));
         }
 
-        int result = merchantStockService.updateMerchantStock(id, merchantStock); // 🔹 استخدم تحديث بدلًا من إضافة
+        int result = merchantStockService.updateMerchantStock(id, merchantStock);
 
         if (result == 200) {
             return ResponseEntity.ok(new ApiResponse("Merchant stock updated successfully!"));
@@ -63,7 +63,7 @@ public class MerchantStockController {
             return ResponseEntity.status(404).body(new ApiResponse("Invalid Product ID!"));
         }
 
-        return ResponseEntity.status(500).body(new ApiResponse("Unexpected error!"));
+        return ResponseEntity.status(500).body(new ApiResponse("Error!"));
     }
     // Deleting IN Controller
     @DeleteMapping("/delete/{id}")

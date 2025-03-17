@@ -35,25 +35,34 @@ public class ProductService {
             }
         }
         if (!categoryExists) {
-            return 2; // Invalid Category ID!
+            return 2;
         }
         products.add(product);
-        return 200; // Product added successfully!
+        return 200;
     }
 
     // Updating IN Service
-    public boolean updateProduct(String  id, Product product) {
-        System.out.println("Updating product with ID: " + id);
-        System.out.println("Current products list: " + products);
-        for (int i = 0; i < products.size(); i++) {
-            System.out.println("Product found! Updating...");
-            if (products.get(i).getId().equals(id)) {
-                products.set(i, product);
-                return true;
+    public int updateProduct(String id, Product product) {
+        boolean categoryExists = false;
+        for (Category c : categoryService.getAllCategories()) {
+            if (c.getId().equals(product.getCategoryID())) {
+                categoryExists = true;
+                break;
             }
         }
-        return false;
+
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getId().equals(id)) {
+                products.set(i, product);
+                return 200;
+            }
+        }
+        if (!categoryExists) {
+            return 2;
+        }
+        return 1;
     }
+
     // Deleting IN Service
     public boolean deleteProduct(String id) {
         for (int i = 0; i < products.size(); i++) {
