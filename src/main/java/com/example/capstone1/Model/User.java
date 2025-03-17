@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.context.annotation.Primary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class User {
@@ -33,5 +36,8 @@ public class User {
     @NotNull(message = "Balance must not be empty")
     @Positive()
     private double balance;
+
+    private ArrayList<String> likedProducts = new ArrayList<>();
+
 
 }
