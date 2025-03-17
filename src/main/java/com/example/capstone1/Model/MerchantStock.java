@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
+
 @Data
 @AllArgsConstructor
 public class MerchantStock {
@@ -23,6 +25,5 @@ public class MerchantStock {
     @Max(value = 100, message = "The 'Stock' be more than 10 ")
     @Min(value = 10, message = "The 'Stock' be more than 10")
     private int stock;
-
 
 }

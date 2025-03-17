@@ -56,7 +56,7 @@ public class UserController {
         return ResponseEntity.status(404).body(new ApiResponse("User ID not found!"));
     }
 
-    // #1( first ) idea of extra endpoints (addToLike IN Service)
+    // #1( first ) idea of extra endpoints (addToLike IN Controller)
     @PostMapping("/add-to-like")
     public ResponseEntity<?> addToLike(@RequestParam String id, @RequestParam String productId) {
         int result = userService.addToLike(id, productId);
@@ -72,5 +72,27 @@ public class UserController {
         }
         return ResponseEntity.status(500).body(new ApiResponse("Error!"));
     }
+
+    // #2  idea (addProductReview IN Controller)
+    @PostMapping("/add-review")
+    public ResponseEntity<?> addProductReview(
+            @RequestParam String userId,
+            @RequestParam String productId,
+            @RequestParam int rating,
+            @RequestParam String comment) {
+
+        int result = userService.addProductReview(userId, productId, rating, comment);
+
+        if (result == 200) {
+            return ResponseEntity.ok().body(new ApiResponse("Review added successfully!"));
+        } else if (result == 2) {
+            return ResponseEntity.status(404).body(new ApiResponse("User not found!"));
+        } else if (result == 3) {
+            return ResponseEntity.status(404).body(new ApiResponse("Product not found!"));
+        }
+
+        return ResponseEntity.status(500).body(new ApiResponse("Error!"));
+    }
+
 
 }

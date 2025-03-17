@@ -36,8 +36,8 @@ public class User {
     @NotNull(message = "Balance must not be empty")
     @Positive()
     private double balance;
-
     private ArrayList<String> likedProducts = new ArrayList<>();
+    private ArrayList<Review> reviews = new ArrayList<>();
 
 
 }

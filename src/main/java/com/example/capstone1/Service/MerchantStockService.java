@@ -148,7 +148,7 @@ public class MerchantStockService {
     }
 
     // 12- Create endpoint where user can buy a product directly
-    public int buyProduct(String merchantID, String productID, String userId) {
+    public int buyProduct(String id, String merchantID, String productID, String userId) {
         // check if all the given ids are valid or not
         boolean merchantExists = false;
         boolean productExists = false;
@@ -186,7 +186,7 @@ public class MerchantStockService {
         // check if the merchant has the product in stock or return bad request
         MerchantStock stock = null;
         for (MerchantStock ms : merchantStocks) {
-            if (ms.getMerchantID().equals(merchantID) && ms.getProductID().equals(productID)) {
+            if (ms.getId().equals(id) && ms.getMerchantID().equals(merchantID) && ms.getProductID().equals(productID)) {
                 stock = ms;
                 break;
             }

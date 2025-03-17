@@ -80,8 +80,8 @@ public class MerchantStockController {
 
     // 11- Create endpoint where  merchant can add more stocks of product to a merchant Stock
     @PostMapping("/add-stock")
-    public ResponseEntity<?> addMoreMerchantStocks(@RequestParam String id, @RequestParam String merchantId,@RequestParam String productId, @RequestParam int amount) {
-        int result = merchantStockService.addMoreMerchantStocks(id,merchantId, productId, amount);
+    public ResponseEntity<?> addMoreMerchantStocks(@RequestParam String id, @RequestParam String merchantId, @RequestParam String productId, @RequestParam int amount) {
+        int result = merchantStockService.addMoreMerchantStocks(id, merchantId, productId, amount);
 
         if (result == 200) {
             return ResponseEntity.ok().body(new ApiResponse("Merchant stock updated successfully!"));
@@ -95,12 +95,14 @@ public class MerchantStockController {
         return ResponseEntity.status(500).body(new ApiResponse("Error!"));
 
     }
+
     // 12- Create endpoint where user can buy a product directly
     @PostMapping("/buy-product")
-    public ResponseEntity<?> buyProduct(@RequestParam String merchantId,
+    public ResponseEntity<?> buyProduct(@RequestParam String id,
+                                        @RequestParam String merchantId,
                                         @RequestParam String productId,
                                         @RequestParam String userId) {
-        int result = merchantStockService.buyProduct(merchantId, productId, userId);
+        int result = merchantStockService.buyProduct(id, merchantId, productId, userId);
 
         if (result == 200) {
             return ResponseEntity.ok().body(new ApiResponse("Product purchased successfully!"));

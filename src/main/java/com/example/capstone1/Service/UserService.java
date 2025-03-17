@@ -2,6 +2,7 @@ package com.example.capstone1.Service;
 
 import com.example.capstone1.Model.Category;
 import com.example.capstone1.Model.Product;
+import com.example.capstone1.Model.Review;
 import com.example.capstone1.Model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -87,6 +88,40 @@ public class UserService {
 
         user.getLikedProducts().add(productId);
         System.out.println("Liked products: " + user.getLikedProducts());
+
+        return 200;
+    }
+
+    // #2  idea (addProductReview IN Service)
+    public int addProductReview(String userId, String productId, int rating, String comment) {
+        User user = null;
+        for (User u : users) {
+            if (u.getId().equals(userId)) {
+                user = u;
+                break;
+            }
+        }
+        if (user == null) {
+            return 2;
+        }
+
+        boolean productExists = false;
+        for (Product p : productService.getAllProducts()) {
+            if (p.getId().equals(productId)) {
+                productExists = true;
+                break;
+            }
+        }
+        if (!productExists) {
+            return 3;
+        }
+
+        if (user.getReviews() == null) {
+            user.setReviews(new ArrayList<>());
+        }
+
+        Review review = new Review(userId, productId, rating, comment);
+        user.getReviews().add(review);
 
         return 200;
     }
