@@ -37,9 +37,11 @@ public class MerchantStockController {
             return ResponseEntity.status(404).body(new ApiResponse("Merchant stock ID already exists!"));
         } else if (result == 2) {
             return ResponseEntity.status(404).body(new ApiResponse("Invalid Merchant ID!"));
+        }else if(result == 3){
+            return ResponseEntity.status(404).body(new ApiResponse("Invalid Product ID!"));
         }
 
-        return ResponseEntity.status(500).body(new ApiResponse("Unexpected error!"));
+        return ResponseEntity.status(500).body(new ApiResponse("error!"));
     }
 
     // Updating IN Controller
@@ -48,14 +50,21 @@ public class MerchantStockController {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(new ApiResponse(errors.getFieldError().getDefaultMessage()));
         }
-        boolean isUpdated = merchantStockService.updateMerchantStock(id, merchantStock);
 
-        if (isUpdated) {
+        int result = merchantStockService.updateMerchantStock(id, merchantStock); // 🔹 استخدم تحديث بدلًا من إضافة
+
+        if (result == 200) {
             return ResponseEntity.ok(new ApiResponse("Merchant stock updated successfully!"));
+        } else if (result == 1) {
+            return ResponseEntity.status(404).body(new ApiResponse("Merchant stock not found!"));
+        } else if (result == 2) {
+            return ResponseEntity.status(404).body(new ApiResponse("Invalid Merchant ID!"));
+        } else if (result == 3) {
+            return ResponseEntity.status(404).body(new ApiResponse("Invalid Product ID!"));
         }
-        return ResponseEntity.status(404).body(new ApiResponse("Merchant stock not found!"));
-    }
 
+        return ResponseEntity.status(500).body(new ApiResponse("Unexpected error!"));
+    }
     // Deleting IN Controller
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteMerchantStock(@PathVariable String id) {
