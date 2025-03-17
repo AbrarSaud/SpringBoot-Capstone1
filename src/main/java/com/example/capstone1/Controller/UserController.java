@@ -1,16 +1,58 @@
 package com.example.capstone1.Controller;
 
 
+import com.example.capstone1.Api.ApiResponse;
+import com.example.capstone1.Model.User;
+import com.example.capstone1.Service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/souky-store/user")
 @RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
+
     // Getting IN Controller
+    @GetMapping("/get")
+    public ResponseEntity<?> getUsers() {
+        return ResponseEntity.status(200).body(userService.getAllUsers());
+    }
+
     // Adding IN Controller
+    @PostMapping("/add")
+    public ResponseEntity<?> addUser(@RequestBody @Valid User user, Errors errors) {
+        boolean isAdded = userService.addUser(user);
+
+        if (isAdded) {
+            return ResponseEntity.status(200).body(new ApiResponse("User added successfully!"));
+        }
+
+        return ResponseEntity.status(400).body(new ApiResponse("User ID already exists!"));
+    }
+
     // Updating IN Controller
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable String id, @RequestBody @Valid User user, Errors errors) {
+        boolean isUpdated = userService.updateUser(id, user);
+
+        if (isUpdated) {
+            return ResponseEntity.status(200).body(new ApiResponse("User updated successfully!"));
+        }
+        return ResponseEntity.status(404).body(new ApiResponse("User ID not found!"));
+    }
+
     // Deleting IN Controller
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable String id) {
+        boolean isDeleted = userService.deleteUser(id);
+
+        if (isDeleted) {
+            return ResponseEntity.status(200).body(new ApiResponse("User deleted successfully!"));
+        }
+        return ResponseEntity.status(404).body(new ApiResponse("User ID not found!"));
+    }
 }
