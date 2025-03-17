@@ -38,6 +38,7 @@ public class User {
     private double balance;
     private ArrayList<String> likedProducts = new ArrayList<>();
     private ArrayList<Review> reviews = new ArrayList<>();
+    private ArrayList<String> purchasedProducts = new ArrayList<>();
 
 
 }

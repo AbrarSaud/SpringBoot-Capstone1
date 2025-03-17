@@ -218,9 +218,12 @@ public class MerchantStockService {
         if (user.getBalance() < product.getPrice()) {
             return 6;
         }
+        if (user.getPurchasedProducts() == null) {
+            user.setPurchasedProducts(new ArrayList<>());
+        }
         stock.setStock(stock.getStock() - 1);
         user.setBalance(user.getBalance() - product.getPrice());
-
+        user.getPurchasedProducts().add(productID);
         return 200;
     }
 }
