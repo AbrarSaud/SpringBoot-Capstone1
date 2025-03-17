@@ -73,4 +73,33 @@ public class ProductService {
         }
         return false;
     }
+
+    // #5  idea (getLatestProducts IN Service)
+    public ArrayList<Product> getLatestProducts(int limit) {
+        ArrayList<Product> sortedProducts = new ArrayList<>(products);
+        ArrayList<Product> latestProducts = new ArrayList<>();
+
+        for (int i = 0; i < sortedProducts.size(); i++) {
+            for (int j = i + 1; j < sortedProducts.size(); j++) {
+                if (sortedProducts.get(i).getCreatedAt().isBefore(sortedProducts.get(j).getCreatedAt())) {
+                    Product temp = sortedProducts.get(i);
+                    sortedProducts.set(i, sortedProducts.get(j));
+                    sortedProducts.set(j, temp);
+                }
+            }
+        }
+
+        for (int i = 0; i < limit; i++) {
+            if (i < sortedProducts.size()) {
+                latestProducts.add(sortedProducts.get(i));
+            } else {
+                break;
+            }
+        }
+
+        return latestProducts;
+    }
+
+
+
 }

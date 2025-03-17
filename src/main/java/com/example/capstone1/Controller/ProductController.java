@@ -71,4 +71,11 @@ public class ProductController {
         }
         return ResponseEntity.status(404).body(new ApiResponse("NOT found"));
     }
+
+    // #5  idea (getLatestProducts IN Controller)
+    @GetMapping("/latest-products")
+    public ResponseEntity<?> getLatestProducts(@RequestParam int limit) {
+        return ResponseEntity.ok(productService.getLatestProducts(limit));
+    }
+
 }
