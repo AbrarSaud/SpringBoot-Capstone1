@@ -37,16 +37,14 @@ public class ProductController {
             return ResponseEntity.status(404).body(new ApiResponse("Product ID already exists!"));
         } else if (result == 2) {
             return ResponseEntity.status(404).body(new ApiResponse("Invalid Category ID!"));
-        } else if (result == 3) {
-            return ResponseEntity.status(404).body(new ApiResponse("Category is null"));
-
         }
-        return ResponseEntity.status(500).body(new ApiResponse("Unexpected error!"));
+
+        return ResponseEntity.status(500).body(new ApiResponse("error!"));
     }
 
     // Updating IN Controller
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable int id, @RequestBody @Valid Product product, Errors errors) {
+    public ResponseEntity<?> updateProduct(@PathVariable String id, @RequestBody @Valid Product product, Errors errors) {
         if (errors.hasErrors()) {
             String messageError = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(400).body(new ApiResponse(messageError));
@@ -60,7 +58,7 @@ public class ProductController {
 
     // Deleting IN Controller
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable int id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         boolean isDeleted = productService.deleteProduct(id);
         if (isDeleted) {
             return ResponseEntity.status(200).body(new ApiResponse("Product deleted successfully!"));
