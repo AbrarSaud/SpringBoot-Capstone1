@@ -1,8 +1,8 @@
 package com.example.capstone1.Model;
 
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,9 +19,10 @@ public class MerchantStock {
     @NotEmpty(message = "The  Merchant ID must not be empty")
     private String merchantID;
 
-    @NotEmpty(message = "The stock must not be empty")
-    @Size(min = 10, max = 100, message = "The 'Stock' be more than 10 ")
-    private String stock;
+    @NotNull(message = "The stock must not be empty")
+    @Max(value = 100, message = "The 'Stock' be more than 10 ")
+    @Min(value = 10, message = "The 'Stock' be more than 10")
+    private int stock;
 
 
 }
