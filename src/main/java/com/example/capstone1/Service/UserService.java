@@ -2,16 +2,23 @@ package com.example.capstone1.Service;
 
 import com.example.capstone1.Model.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private ArrayList<User> users = new ArrayList<>();
     private final ProductService productService;
-    private final ArrayList<DiscountCode> discountCodes = new ArrayList<>();
+    private ArrayList<Map<String, String>> reviews = new ArrayList<>();
+//    @Lazy
+//    private final MerchantStockService merchantStockService;
+
 
     // Getting IN Service
     public ArrayList<User> getAllUsers() {
@@ -92,20 +99,16 @@ public class UserService {
 
     // #2  idea (addProductReview IN Service)
     public int addProductReview(String userId, String productId, int rating, String comment) {
-        User user = null;
-        for (User u : users) {
-            if (u.getId().equals(userId)) {
-                user = u;
-                break;
-            }
-        }
+        User user = getUserById(userId);
         if (user == null) {
             return 2;
         }
 
         boolean productExists = false;
+        String nameProduct = "";
         for (Product p : productService.getAllProducts()) {
             if (p.getId().equals(productId)) {
+                nameProduct = p.getName();
                 productExists = true;
                 break;
             }
@@ -114,24 +117,23 @@ public class UserService {
             return 3;
         }
 
-        if (user.getReviews() == null) {
-            user.setReviews(new ArrayList<>());
-        }
+        Map<String, String> review = new HashMap<>();
+        review.put("userId", userId);
+        review.put("productId", productId);
+        review.put("nameProduct", nameProduct);
+        review.put("rating", String.valueOf(rating));
+        review.put("comment", comment);
 
-        Review review = new Review(userId, productId, rating, comment);
-        user.getReviews().add(review);
-
+        reviews.add(review);
         return 200;
     }
 
     // #3  idea (applyDiscountCode IN Service)
-    public double applyDiscountCode(String code, double totalAmount) {
-        discountCodes.add(new DiscountCode("A10", 0.10));
-        discountCodes.add(new DiscountCode("A20", 0.20));
-        discountCodes.add(new DiscountCode("A50", 0.50));
-        for (DiscountCode discount : discountCodes) {
-            if (discount.getCode().equalsIgnoreCase(code)) {
-                return totalAmount * (1 - discount.getDiscountPercentage());
+    public double applyDiscountCode(User user, String code, double totalAmount) {
+        for (String[] discount : user.getDiscountCodes()) {
+            if (discount[0].equals(code)) {
+                double discountPercentage = Double.parseDouble(discount[1]);
+                return totalAmount * (1 - discountPercentage);
             }
         }
         return -1;
@@ -171,9 +173,29 @@ public class UserService {
 
         user.setBalance(user.getBalance() + product.getPrice());
         user.getPurchasedProducts().remove(productId);
+        user.setBalance(user.getBalance() + product.getPrice());
+        user.getPurchasedProducts().remove(productId);
+
+//        MerchantStock stock = merchantStockService.findByProductId(productId);
+//        if (stock != null) {
+//            stock.setStock(stock.getStock() + 1);
+//        }
+
 
         return 200;
     }
 
 
+    public ArrayList<Map<String, String>> getReviews() {
+        return reviews;
+    }
+
+    public User getUserById(String userId) {
+        for (User user : users) {
+            if (user.getId().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
+    }
 }

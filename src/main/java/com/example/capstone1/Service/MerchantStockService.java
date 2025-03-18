@@ -17,6 +17,7 @@ public class MerchantStockService {
     private final ProductService productService;
     private final UserService userService;
 
+
     // Getting IN Service
     public ArrayList<MerchantStock> getAllMerchantStocks() {
         return merchantStocks;
@@ -224,6 +225,18 @@ public class MerchantStockService {
         stock.setStock(stock.getStock() - 1);
         user.setBalance(user.getBalance() - product.getPrice());
         user.getPurchasedProducts().add(productID);
+
         return 200;
     }
+
+    ///   مثود استعملتها في  returnProduct IN Service عشان ارجع القيمة stockالاصلية بعد ارجاع المتج
+    public MerchantStock findByProductId(String productId) {
+        for (MerchantStock stock : merchantStocks) {
+            if (stock.getProductID().equals(productId)) {
+                return stock;
+            }
+        }
+        return null;
+    }
+
 }

@@ -37,8 +37,14 @@ public class User {
     @Positive()
     private double balance;
     private ArrayList<String> likedProducts = new ArrayList<>();
-    private ArrayList<Review> reviews = new ArrayList<>();
     private ArrayList<String> purchasedProducts = new ArrayList<>();
+    private final String[][] discountCodes = {
+            {"A10", "0.10"},
+            {"A20", "0.20"},
+            {"A50", "0.50"}
+    };
 
+    private final String[][] reviews = new String[100][2];
+    private int reviewCount = 0;
 
 }

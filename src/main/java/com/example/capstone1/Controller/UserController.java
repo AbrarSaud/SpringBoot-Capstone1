@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/souky-store/users")
 @RequiredArgsConstructor
@@ -75,7 +78,7 @@ public class UserController {
 
     // #2  idea (addProductReview IN Controller)
     @PostMapping("/add-review")
-    public ResponseEntity<?> addProductReview(
+    public ResponseEntity<?> addReview(
             @RequestParam String userId,
             @RequestParam String productId,
             @RequestParam int rating,
@@ -83,21 +86,26 @@ public class UserController {
 
         int result = userService.addProductReview(userId, productId, rating, comment);
 
-        if (result == 200) {
-            return ResponseEntity.ok().body(new ApiResponse("Review added successfully!"));
-        } else if (result == 2) {
+        if (result == 2) {
             return ResponseEntity.status(404).body(new ApiResponse("User not found!"));
         } else if (result == 3) {
             return ResponseEntity.status(404).body(new ApiResponse("Product not found!"));
         }
 
-        return ResponseEntity.status(500).body(new ApiResponse("Error!"));
+        return ResponseEntity.ok().body(new ApiResponse("Review added successfully!"));
     }
+
+
 
     // #3  idea (applyDiscount IN Controller)
     @PostMapping("/apply-discount")
-    public ResponseEntity<?> applyDiscount(@RequestParam String code, @RequestParam double totalAmount) {
-        double discountedPrice = userService.applyDiscountCode(code, totalAmount);
+    public ResponseEntity<?> applyDiscount(@RequestParam String userId, @RequestParam String code, @RequestParam double totalAmount) {
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            return ResponseEntity.status(404).body(new ApiResponse("User not found!"));
+        }
+
+        double discountedPrice = userService.applyDiscountCode(user, code, totalAmount);
 
         if (discountedPrice == -1) {
             return ResponseEntity.status(400).body(new ApiResponse("Invalid discount code!"));
@@ -105,6 +113,7 @@ public class UserController {
 
         return ResponseEntity.ok().body(new ApiResponse("Discount applied! New total: " + discountedPrice));
     }
+
 
     // #4  idea (returnProduct IN Controller)
     @PostMapping("/return-product")
@@ -124,5 +133,9 @@ public class UserController {
         return ResponseEntity.status(500).body(new ApiResponse("Error processing return!"));
     }
 
+    @GetMapping("/reviews")
+    public ResponseEntity<?> getReviews() {
+        return ResponseEntity.ok(userService.getReviews());
+    }
 
 }
